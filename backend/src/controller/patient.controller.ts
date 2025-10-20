@@ -12,7 +12,8 @@ import {
   Res,
   UseBefore,
 } from "routing-controllers";
-import { Response } from "express";
+import { Req } from "routing-controllers";
+import { Request, Response } from "express";
 import { HttpStatus } from "@/constant/http.status";
 import patientService from "@/service/patient.service";
 import {
@@ -50,9 +51,9 @@ export class PatientController {
   @Get("")
   @UseBefore(authenticateToken, authorizeRoles("admin", "doctor", "nurse"))
   @HttpCode(HttpStatus.OK)
-  async list(@QueryParams() query: ListPatientsQueryDto, @Res() res: Response) {
+  async list(@Req() req: Request, @Res() res: Response) {
     try {
-      const result = await patientService.list(query);
+      const result = await patientService.list(req.query);
       return res.status(HttpStatus.OK).json({
         success: true,
         message: "Patients listed successfully",

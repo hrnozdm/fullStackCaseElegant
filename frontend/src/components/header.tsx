@@ -8,7 +8,8 @@ type NavigationLink = { to: keyof FileRoutesByTo; label: string };
 
 const navigationLinks: NavigationLink[] = [
   { to: "/", label: "Ana Sayfa" },
-  {to:"/login",label:"Giriş Yap"}
+  { to: "/patients", label: "Hastalar" },
+  { to: "/login", label: "Giriş Yap" },
 ];
 
 export function Header() {
@@ -26,11 +27,21 @@ export function Header() {
           <h1>Hasta Takip Sistemi</h1>
         </Link>
         <div className="flex gap-8 items-center">
-          {navigationLinks.map((link) => (
-            <Link key={link.to} to={link.to}>
-              {link.label}
-            </Link>
-          ))}
+          {navigationLinks.map((link) => {
+            // Hastalar linkini sadece giriş yapmış kullanıcılara göster
+            if (link.to === "/patients" && !userInfo) {
+              return null;
+            }
+            // Login linkini sadece giriş yapmamış kullanıcılara göster
+            if (link.to === "/login" && userInfo) {
+              return null;
+            }
+            return (
+              <Link key={link.to} to={link.to}>
+                {link.label}
+              </Link>
+            );
+          })}
           {userInfo && (
             <div className="flex items-center gap-3 ml-4">
               <div className="text-sm">

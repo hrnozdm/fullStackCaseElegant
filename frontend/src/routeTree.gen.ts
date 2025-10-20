@@ -14,6 +14,7 @@ import { Route as appPokemonLayoutRouteImport } from './routes/(app)/pokemon/_la
 import { Route as appRegisterIndexRouteImport } from './routes/(app)/register/index'
 import { Route as appPostsIndexRouteImport } from './routes/(app)/posts/index'
 import { Route as appPokemonIndexRouteImport } from './routes/(app)/pokemon/index'
+import { Route as appPatientsIndexRouteImport } from './routes/(app)/patients/index'
 import { Route as appLoginIndexRouteImport } from './routes/(app)/login/index'
 import { Route as appPostsPostIdRouteImport } from './routes/(app)/posts/$postId'
 import { Route as appPokemonPokemonIdRouteImport } from './routes/(app)/pokemon/$pokemonId'
@@ -43,6 +44,11 @@ const appPokemonIndexRoute = appPokemonIndexRouteImport.update({
   path: '/',
   getParentRoute: () => appPokemonLayoutRoute,
 } as any)
+const appPatientsIndexRoute = appPatientsIndexRouteImport.update({
+  id: '/(app)/patients/',
+  path: '/patients/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const appLoginIndexRoute = appLoginIndexRouteImport.update({
   id: '/(app)/login/',
   path: '/login/',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/pokemon/$pokemonId': typeof appPokemonPokemonIdRoute
   '/posts/$postId': typeof appPostsPostIdRoute
   '/login': typeof appLoginIndexRoute
+  '/patients': typeof appPatientsIndexRoute
   '/pokemon/': typeof appPokemonIndexRoute
   '/posts': typeof appPostsIndexRoute
   '/register': typeof appRegisterIndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/pokemon/$pokemonId': typeof appPokemonPokemonIdRoute
   '/posts/$postId': typeof appPostsPostIdRoute
   '/login': typeof appLoginIndexRoute
+  '/patients': typeof appPatientsIndexRoute
   '/pokemon': typeof appPokemonIndexRoute
   '/posts': typeof appPostsIndexRoute
   '/register': typeof appRegisterIndexRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/(app)/pokemon/$pokemonId': typeof appPokemonPokemonIdRoute
   '/(app)/posts/$postId': typeof appPostsPostIdRoute
   '/(app)/login/': typeof appLoginIndexRoute
+  '/(app)/patients/': typeof appPatientsIndexRoute
   '/(app)/pokemon/': typeof appPokemonIndexRoute
   '/(app)/posts/': typeof appPostsIndexRoute
   '/(app)/register/': typeof appRegisterIndexRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/pokemon/$pokemonId'
     | '/posts/$postId'
     | '/login'
+    | '/patients'
     | '/pokemon/'
     | '/posts'
     | '/register'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/pokemon/$pokemonId'
     | '/posts/$postId'
     | '/login'
+    | '/patients'
     | '/pokemon'
     | '/posts'
     | '/register'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/(app)/pokemon/$pokemonId'
     | '/(app)/posts/$postId'
     | '/(app)/login/'
+    | '/(app)/patients/'
     | '/(app)/pokemon/'
     | '/(app)/posts/'
     | '/(app)/register/'
@@ -126,6 +138,7 @@ export interface RootRouteChildren {
   appPokemonLayoutRoute: typeof appPokemonLayoutRouteWithChildren
   appPostsPostIdRoute: typeof appPostsPostIdRoute
   appLoginIndexRoute: typeof appLoginIndexRoute
+  appPatientsIndexRoute: typeof appPatientsIndexRoute
   appPostsIndexRoute: typeof appPostsIndexRoute
   appRegisterIndexRoute: typeof appRegisterIndexRoute
 }
@@ -166,6 +179,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/pokemon/'
       preLoaderRoute: typeof appPokemonIndexRouteImport
       parentRoute: typeof appPokemonLayoutRoute
+    }
+    '/(app)/patients/': {
+      id: '/(app)/patients/'
+      path: '/patients'
+      fullPath: '/patients'
+      preLoaderRoute: typeof appPatientsIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(app)/login/': {
       id: '/(app)/login/'
@@ -209,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   appPokemonLayoutRoute: appPokemonLayoutRouteWithChildren,
   appPostsPostIdRoute: appPostsPostIdRoute,
   appLoginIndexRoute: appLoginIndexRoute,
+  appPatientsIndexRoute: appPatientsIndexRoute,
   appPostsIndexRoute: appPostsIndexRoute,
   appRegisterIndexRoute: appRegisterIndexRoute,
 }

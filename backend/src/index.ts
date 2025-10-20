@@ -21,7 +21,7 @@ useExpressServer(app, {
   controllers: [UserController, PatientController],
   middlewares: [authenticateToken],
   interceptors: [],
-  defaultErrorHandler: false,
+  defaultErrorHandler: true,
   validation: true,
 });
 

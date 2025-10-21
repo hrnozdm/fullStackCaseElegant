@@ -22,8 +22,12 @@ export function PatientActionsCell({ row, onEdit }: PatientActionsCellProps) {
   };
 
   const handleDelete = () => {
-    if (window.confirm(`${patient.firstName} ${patient.lastName} adlı hastayı silmek istediğinizden emin misiniz?`)) {
-      deletePatient.mutate(patient.id);
+    if (
+      window.confirm(
+        `${patient?.firstName} ${patient?.lastName} adlı hastayı silmek istediğinizden emin misiniz?`
+      )
+    ) {
+      deletePatient.mutate(patient?.id ?? "");
     }
   };
 

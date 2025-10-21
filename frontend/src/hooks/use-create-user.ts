@@ -3,19 +3,17 @@ import { api } from "@/lib/api/api";
 import { type IUserCreate, userCreateResponseSchema } from "@/lib/schema/users";
 import { toast } from "sonner";
 
-
-
 async function createUser({ body }: { body: IUserCreate }) {
   const { data } = await api.post(`/users/register`, body);
 
-  const parsedResponse = userCreateResponseSchema.safeParse(data);
+  const parsedResponse = userCreateResponseSchema.safeParseAsync(data);
 
-  if (!parsedResponse.success) {
-    console.error(parsedResponse.error);
-    throw new Error(parsedResponse.error.message);
+  if (!parsedResponse) {
+    console.error(parsedResponse);
+    throw new Error(parsedResponse);
   }
 
-  return parsedResponse.data;
+  return parsedResponse;
 }
 
 export function useCreateUser() {
@@ -32,5 +30,3 @@ export function useCreateUser() {
     },
   });
 }
-
-

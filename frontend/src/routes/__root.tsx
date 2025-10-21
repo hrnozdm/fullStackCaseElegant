@@ -1,12 +1,13 @@
 import { Header } from "@/components/header";
 import { Spinner } from "@/components/Spinner";
-import type { TestContext } from "@/context/test-context";
+import type { AuthContextType } from "@/context/auth-context";
 import { QueryClient } from "@tanstack/react-query";
 import {
   Outlet,
   createRootRouteWithContext,
   useRouterState,
 } from "@tanstack/react-router";
+import { Toaster } from "sonner";
 
 function RouterSpinner() {
   const isLoading = useRouterState({ select: (s) => s.status === "pending" });
@@ -15,7 +16,7 @@ function RouterSpinner() {
 
 interface RootContext {
   queryClient: QueryClient;
-  testContext: TestContext;
+  auth: AuthContextType;
 }
 
 export const Route = createRootRouteWithContext<RootContext>()({
@@ -28,6 +29,7 @@ function RootComponent() {
       <Header />
       <RouterSpinner />
       <Outlet />
+      <Toaster position="bottom-right" richColors />
     </>
   );
 }

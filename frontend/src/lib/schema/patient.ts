@@ -52,7 +52,7 @@ export const patientSchema = z
     phone: z.string(),
     email: z.string(),
     address: z.string(),
-    medicalHistory: z.string().optional(),
+    medicalHistory: z.string().nullable().optional(),
     createdAt: z.string(),
     updatedAt: z.string(),
   })

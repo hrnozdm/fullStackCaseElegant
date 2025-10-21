@@ -5,10 +5,12 @@ import { PatientDataTable } from "@/components/tables/patient/data-table";
 import { createPatientColumns } from "@/components/tables/patient/columns";
 import { PatientForm } from "@/components/forms/patient-form";
 import { useAuth } from "@/context/auth-context";
+import { useUserInfo } from "@/hooks/use-user-info";
 import type { IPatient } from "@/lib/schema/patient";
 
 function PatientsPage() {
   const { isAuthenticated } = useAuth();
+  const { canManagePatients } = useUserInfo();
   const [showForm, setShowForm] = useState(false);
   const [editingPatient, setEditingPatient] = useState<IPatient | undefined>();
 
@@ -27,7 +29,7 @@ function PatientsPage() {
     sortOrder: "desc",
   });
 
-  const patients = patientsResponse?.data?.items || [];
+  const patients = patientsResponse?.data?.data?.items || [];
 
   const handleAddPatient = () => {
     setEditingPatient(undefined);
@@ -50,7 +52,8 @@ function PatientsPage() {
   };
 
   const columns = createPatientColumns({
-    onEdit: handleEditPatient,
+    onEdit: canManagePatients ? handleEditPatient : undefined,
+    canManagePatients,
   });
 
   if (error) {
@@ -78,7 +81,7 @@ function PatientsPage() {
         </p>
       </div>
 
-      {showForm ? (
+      {showForm && canManagePatients ? (
         <div className="mb-8">
           <PatientForm
             patient={editingPatient}
@@ -91,18 +94,19 @@ function PatientsPage() {
           <PatientDataTable
             columns={columns}
             data={patients}
-            onAddPatient={handleAddPatient}
+            onAddPatient={canManagePatients ? handleAddPatient : undefined}
             isLoading={isLoading}
             filterColumn="firstName"
             enableView={true}
             enableSelect={false}
+            canManagePatients={canManagePatients}
           />
         </div>
       )}
 
       {patientsResponse?.data && !showForm && (
         <div className="mt-4 text-sm text-gray-500 text-center">
-          Toplam {patientsResponse.data.total} hasta bulundu
+          Toplam {patientsResponse.data.data?.total} hasta bulundu
         </div>
       )}
     </div>

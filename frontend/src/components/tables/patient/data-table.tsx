@@ -34,6 +34,7 @@ interface PatientDataTableProps {
   filterColumn?: string;
   onAddPatient?: () => void;
   isLoading?: boolean;
+  canManagePatients?: boolean;
 }
 
 export function PatientDataTable({
@@ -44,6 +45,7 @@ export function PatientDataTable({
   filterColumn = "firstName",
   onAddPatient,
   isLoading = false,
+  canManagePatients = false,
 }: PatientDataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -83,17 +85,16 @@ export function PatientDataTable({
       <div className="flex items-center justify-between py-4">
         <div className="flex items-center gap-4">
           {filterColumn && (
-            <DataTableFilter 
-              table={table} 
-              columnName={filterColumn}
-              placeholder="Hasta ara..."
-            />
+            <DataTableFilter table={table} columnName={filterColumn} />
           )}
         </div>
-        
+
         <div className="flex items-center gap-4">
-          {onAddPatient && (
-            <Button onClick={onAddPatient} className="bg-blue-600 hover:bg-blue-700">
+          {onAddPatient && canManagePatients && (
+            <Button
+              onClick={onAddPatient}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               Yeni Hasta Ekle
             </Button>
           )}
@@ -150,7 +151,10 @@ export function PatientDataTable({
                   )}
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>

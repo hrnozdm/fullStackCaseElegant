@@ -1,20 +1,24 @@
 import { DataTableColumnHeader } from "@/components/tables/shared/data-table-column-header";
 import type { IPatient } from "@/lib/schema/patient";
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, Row } from "@tanstack/react-table";
 import { PatientActionsCell } from "./custom-cells/patient-actions-cell";
 
 interface PatientColumnsProps {
   onEdit?: (patient: IPatient) => void;
+  canManagePatients?: boolean;
 }
 
-export const createPatientColumns = ({ onEdit }: PatientColumnsProps = {}): ColumnDef<IPatient>[] => [
+export const createPatientColumns = ({
+  onEdit,
+  canManagePatients = false,
+}: PatientColumnsProps = {}): ColumnDef<IPatient>[] => [
   {
     accessorKey: "firstName",
     header: ({ column }) => {
       return <DataTableColumnHeader column={column} title="Ad" />;
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.original.firstName}</div>;
+      return <div className="font-medium">{row.original?.firstName || ""}</div>;
     },
   },
   {
@@ -23,7 +27,7 @@ export const createPatientColumns = ({ onEdit }: PatientColumnsProps = {}): Colu
       return <DataTableColumnHeader column={column} title="Soyad" />;
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.original.lastName}</div>;
+      return <div className="font-medium">{row.original?.lastName || ""}</div>;
     },
   },
   {
@@ -32,7 +36,9 @@ export const createPatientColumns = ({ onEdit }: PatientColumnsProps = {}): Colu
       return <DataTableColumnHeader column={column} title="Email" />;
     },
     cell: ({ row }) => {
-      return <div className="text-sm text-gray-600">{row.original.email}</div>;
+      return (
+        <div className="text-sm text-gray-600">{row.original?.email || ""}</div>
+      );
     },
   },
   {
@@ -41,7 +47,7 @@ export const createPatientColumns = ({ onEdit }: PatientColumnsProps = {}): Colu
       return <DataTableColumnHeader column={column} title="Telefon" />;
     },
     cell: ({ row }) => {
-      return <div className="text-sm">{row.original.phone}</div>;
+      return <div className="text-sm">{row.original?.phone || ""}</div>;
     },
   },
   {
@@ -57,7 +63,9 @@ export const createPatientColumns = ({ onEdit }: PatientColumnsProps = {}): Colu
       };
       return (
         <div className="text-sm">
-          {genderMap[row.original.gender] || row.original.gender}
+          {row.original?.gender
+            ? genderMap[row.original.gender] || row.original.gender
+            : ""}
         </div>
       );
     },
@@ -68,10 +76,12 @@ export const createPatientColumns = ({ onEdit }: PatientColumnsProps = {}): Colu
       return <DataTableColumnHeader column={column} title="Doğum Tarihi" />;
     },
     cell: ({ row }) => {
-      const date = new Date(row.original.dateOfBirth);
+      const date = row.original?.dateOfBirth
+        ? new Date(row.original.dateOfBirth)
+        : null;
       return (
         <div className="text-sm">
-          {date.toLocaleDateString("tr-TR")}
+          {date ? date.toLocaleDateString("tr-TR") : ""}
         </div>
       );
     },
@@ -79,10 +89,16 @@ export const createPatientColumns = ({ onEdit }: PatientColumnsProps = {}): Colu
   {
     accessorKey: "address",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Adres" enableSorting={false} />;
+      return (
+        <DataTableColumnHeader
+          column={column}
+          title="Adres"
+          enableSorting={false}
+        />
+      );
     },
     cell: ({ row }) => {
-      const address = row.original.address;
+      const address = row.original?.address || "";
       return (
         <div className="text-sm max-w-[200px] truncate" title={address}>
           {address}
@@ -96,21 +112,27 @@ export const createPatientColumns = ({ onEdit }: PatientColumnsProps = {}): Colu
       return <DataTableColumnHeader column={column} title="Kayıt Tarihi" />;
     },
     cell: ({ row }) => {
-      const date = new Date(row.original.createdAt);
+      const date = row.original?.createdAt
+        ? new Date(row.original.createdAt)
+        : null;
       return (
         <div className="text-sm text-gray-500">
-          {date.toLocaleDateString("tr-TR")}
+          {date ? date.toLocaleDateString("tr-TR") : ""}
         </div>
       );
     },
   },
-  {
-    id: "actions",
-    header: () => <div className="text-center">İşlemler</div>,
-    cell: ({ row }) => {
-      return <PatientActionsCell row={row} onEdit={onEdit} />;
-    },
-    enableSorting: false,
-    enableHiding: false,
-  },
+  ...(canManagePatients
+    ? [
+        {
+          id: "actions",
+          header: () => <div className="text-center">İşlemler</div>,
+          cell: ({ row }: { row: Row<IPatient> }) => {
+            return <PatientActionsCell row={row} onEdit={onEdit} />;
+          },
+          enableSorting: false,
+          enableHiding: false,
+        },
+      ]
+    : []),
 ];

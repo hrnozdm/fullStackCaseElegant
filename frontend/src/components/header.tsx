@@ -1,5 +1,5 @@
 import type { FileRoutesByTo } from "@/routeTree.gen";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useUserInfo } from "@/hooks/use-user-info";
 import { toast } from "sonner";
@@ -14,10 +14,12 @@ const navigationLinks: NavigationLink[] = [
 
 export function Header() {
   const { userInfo, logout } = useUserInfo();
+  const navigate = useNavigate();
 
   const logOut = () => {
     logout();
     toast.success("Çıkış yapıldı");
+    navigate({ to: "/login", replace: true });
   };
 
   return (

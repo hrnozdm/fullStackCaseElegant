@@ -39,7 +39,7 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} context={{ auth }} />
+      <RouterProvider router={router} context={{ auth, queryClient }} />
     </>
   );
 }

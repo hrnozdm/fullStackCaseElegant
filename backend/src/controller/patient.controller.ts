@@ -20,11 +20,7 @@ import {
   authenticateToken,
   authorizeRoles,
 } from "@/middleware/auth.middleware";
-import {
-  CreatePatientDto,
-  ListPatientsQueryDto,
-  UpdatePatientDto,
-} from "@/dto/patient.dto";
+import { CreatePatientDto, UpdatePatientDto } from "@/dto/patient.dto";
 
 @Controller("/api/patients")
 export class PatientController {

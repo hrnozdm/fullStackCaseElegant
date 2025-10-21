@@ -14,8 +14,8 @@ import { toast } from "sonner";
 async function createPatient({ body }: { body: IPatientCreate }) {
   const { data } = await api.post(`/patients`, body);
 
-  const parsedResponse = patientCreateResponseSchema.safeParse(data);
-  if (!parsedResponse.success) {
+  const parsedResponse = patientCreateResponseSchema.safeParseAsync(data);
+  if (!parsedResponse) {
     const errorParsed = patientErrorResponseSchema.safeParse(data);
     if (errorParsed.success) {
       throw new Error(errorParsed.data.message);
@@ -23,7 +23,7 @@ async function createPatient({ body }: { body: IPatientCreate }) {
     throw new Error("Beklenmeyen response formatı");
   }
 
-  return parsedResponse.data;
+  return parsedResponse;
 }
 
 export function useCreatePatient() {
@@ -53,8 +53,8 @@ async function fetchPatients(query: IPatientListQuery = {}) {
 
   const { data } = await api.get(`/patients?${params.toString()}`);
 
-  const parsedResponse = patientListResponseSchema.safeParse(data);
-  if (!parsedResponse.success) {
+  const parsedResponse = patientListResponseSchema.safeParseAsync(data);
+  if (!parsedResponse) {
     const errorParsed = patientErrorResponseSchema.safeParse(data);
     if (errorParsed.success) {
       throw new Error(errorParsed.data.message);
@@ -62,7 +62,7 @@ async function fetchPatients(query: IPatientListQuery = {}) {
     throw new Error("Beklenmeyen response formatı");
   }
 
-  return parsedResponse.data;
+  return parsedResponse;
 }
 
 export function usePatients(query: IPatientListQuery = {}) {
@@ -107,8 +107,8 @@ async function updatePatient({
 }) {
   const { data } = await api.put(`/patients/${id}`, body);
 
-  const parsedResponse = patientCreateResponseSchema.safeParse(data);
-  if (!parsedResponse.success) {
+  const parsedResponse = patientCreateResponseSchema.safeParseAsync(data);
+  if (!parsedResponse) {
     const errorParsed = patientErrorResponseSchema.safeParse(data);
     if (errorParsed.success) {
       throw new Error(errorParsed.data.message);
@@ -116,7 +116,7 @@ async function updatePatient({
     throw new Error("Beklenmeyen response formatı");
   }
 
-  return parsedResponse.data;
+  return parsedResponse;
 }
 
 export function useUpdatePatient() {
@@ -137,7 +137,7 @@ export function useUpdatePatient() {
 
 // Hasta silme
 async function deletePatient(id: string) {
-  const { data } = await api.delete(`/api/patients/${id}`);
+  const { data } = await api.delete(`/patients/${id}`);
   return data;
 }
 
